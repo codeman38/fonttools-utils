@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-VERSION = "1.23"
+from __future__ import print_function
+
+VERSION = "1.24"
 """pyftfeatfreeze.py
 Version %(version)s
 Copyright (c) 2015 by Adam Twardoch <adam@twardoch.com>
 Licensed under the Apache 2 license.
 """ % {"version": VERSION}
 
+# 1.24 (2017-04-04 by codeman38):
+#      python3 compatibility fixes
 # 1.23 (2015-09-29 by adam):
 #      minor
 # 1.22 (2015-08-06 by adam):
@@ -151,8 +155,8 @@ class RemapByOTL:
 
     def _reportFont(self): 
         self.success = True
-        print "# Scripts and languages:\n%s" % ("\n".join(sorted(list(set(self.reportLangSys)))))
-        print "# Features:\n-f %s" % (",".join(sorted(list(set(self.reportFeature)))))
+        print("# Scripts and languages:\n%s" % ("\n".join(sorted(list(set(self.reportLangSys))))))
+        print("# Features:\n-f %s" % (",".join(sorted(list(set(self.reportFeature))))))
 
     def _saveFontTTX(self):
         self.success = True
@@ -300,7 +304,7 @@ class RemapByOTL:
                 if nr.platformID in [0, 3]:
                     oldname = nr.string.decode("utf_16_be")
                 else:
-                    oldname = nr.string
+                    oldname = nr.string.decode("utf_8")
                 newname = u"%s%s" % (oldname, suffix)
                 if replacenames: 
                     for repl in replacetable: 
@@ -317,7 +321,7 @@ class RemapByOTL:
                     if nr.platformID in [0, 3]:
                         oldname = nr.string.decode("utf_16_be")
                     else:
-                        oldname = nr.string
+                        oldname = nr.string.decode("utf_8")
                     newname = u"%s; featfreeze: %s" % (oldname, self.options.features)
                     if nr.platformID in [0, 3]:
                         nr.string = newname.encode("utf_16_be")
@@ -329,7 +333,7 @@ class RemapByOTL:
                 if nr.platformID in [0, 3]:
                     oldname = nr.string.decode("utf_16_be")
                 else:
-                    oldname = nr.string
+                    oldname = nr.string.decode("utf_8")
                 parts = oldname.split("-")
                 psfamily = parts[0]
                 psstyle = "".join(parts[1:])
@@ -354,8 +358,8 @@ class RemapByOTL:
                     nfam = nrfam.string.decode("utf_16_be")
                     nsty = nrsty.string.decode("utf_16_be")
                 else:
-                    nfam = nrfam.string
-                    nsty = nrsty.string
+                    nfam = nrfam.string.decode("utf_8")
+                    nsty = nrsty.string.decode("utf_8")
                 newname = u"%s %s" % (nfam, nsty)
                 if nr.platformID in [0, 3]:
                     nr.string = newname.encode("utf_16_be")
@@ -405,7 +409,7 @@ class RemapByOTL:
             self.remapCmaps()
         if self.success:
             if self.options.names:
-                print " ".join(self.names)
+                print(" ".join(self.names))
 
     def run(self):
         self.openFont()
@@ -432,7 +436,7 @@ def main():
         else:
             warn("Errors during processing.", "FAIL", exit=True)
     else:
-        print "Add -h for help"
+        print("Add -h for help")
 
 if __name__ == "__main__":
     finish = main()
